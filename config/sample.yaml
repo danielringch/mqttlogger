@@ -1,0 +1,45 @@
+mqtt:
+    host: "localhost:1883"
+    tls: true
+    ca: "/foo/my_ca.crt"
+    tls_insecure: false
+    user: "foo"
+    password: "bar"
+stdout:
+    level: DEBUG
+file:
+    level: DEBUG
+    path: /foo/bar.log
+    days: 365
+discord:
+    level: WARNING
+    token_path: /foo/my_discordbot.token
+    channel_id: 123456789012345678
+topics:
+    homebattery/mode/+:
+        level: INFO
+        type: utf8
+    homebattery/locked:
+        level: ERROR
+        type: utf8
+    homebattery/reset:
+        level: INFO
+        type: utf8
+    homebattery/cha/#:
+        level: INFO
+        type: utf8
+    homebattery/inv/#:
+        level: INFO
+        type: utf8
+    homebattery/sol/#:
+        level: INFO
+        type: utf8
+    homebattery/bat/dev/+:
+        level: INFO
+        type: utf8
+    homebattery/sen/dev/+:
+        level: INFO
+        type: utf8
+    tibber/live/consumption:
+        level: INFO
+        type: uint16
