@@ -8,7 +8,6 @@ from .helpers import get_config_key, get_optional_config_key
 
 _CONFIG_KEY_MQTT = 'mqtt'
 _CONFIG_KEY_HOST = 'host'
-_CONFIG_KEY_TLS = 'tls'
 _CONFIG_KEY_CA = 'ca'
 _CONFIG_KEY_TLS_INSECURE = 'tls_insecure'
 _CONFIG_KEY_USER = 'user'
@@ -35,7 +34,6 @@ _DECODERS = {
 class MqttClient():
     def __init__(self, config: Dict):
         ip, port = get_config_key(config, lambda x: str(x).split(':'), _CONFIG_KEY_MQTT, _CONFIG_KEY_HOST)
-        use_tls = get_optional_config_key(config, bool, False, _CONFIG_KEY_MQTT, _CONFIG_KEY_TLS)
         ca_path = get_optional_config_key(config, str, None, _CONFIG_KEY_MQTT, _CONFIG_KEY_CA)
         is_tls_insecure = get_optional_config_key(config, bool, False, _CONFIG_KEY_MQTT, _CONFIG_KEY_TLS_INSECURE)
         user = get_optional_config_key(config, str, None, _CONFIG_KEY_MQTT, _CONFIG_KEY_USER)
@@ -59,7 +57,7 @@ class MqttClient():
 
         self.__mqtt.on_connect = self.__on_connect
 
-        if use_tls:
+        if ca_path or is_tls_insecure:
             self.__mqtt.tls_set(ca_certs=ca_path, cert_reqs=CERT_NONE if is_tls_insecure else None)
 
         if user or password:

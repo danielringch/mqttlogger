@@ -40,9 +40,8 @@ The configuration is done via yaml file. The example file can be found in [confi
 | Key | Rules | Explanation |
 | -- | -- | -- |
 | ``mqtt`` -> ``host`` | string, ``<host>:<port>`` | Host and port of the MQTT server to connect to. |
-| ``mqtt`` -> ``tls`` | optional, bool | Turns on TLS encryption for the connection to the MQTT server. |
-| ``mqtt`` -> ``ca`` | optional, string | Set the path to the TLS public certificate chain file. |
-| ``mqtt`` -> ``tls_insecure`` | optional, bool | If set to true, the TLS certificates are not checked (not recommended). |
+| ``mqtt`` -> ``ca`` | optional, string | Enables TLS encryption and sets the path to the TLS public certificate chain file. |
+| ``mqtt`` -> ``tls_insecure`` | optional, bool | If set to true, TLS encryption is enabled, but the TLS certificates are not checked (not recommended). |
 | ``mqtt`` -> ``user`` | string | The user name for log in to the MQTT server. |
 | ``mqtt`` -> ``password`` | string | The password for log in to the MQTT server. |
 | ``stdout`` | optional | Enables logging to STDOUT. |

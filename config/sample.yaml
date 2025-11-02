@@ -1,6 +1,5 @@
 mqtt:
     host: "localhost:1883"
-    tls: true
     ca: "/foo/my_ca.crt"
     tls_insecure: false
     user: "foo"
