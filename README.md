@@ -68,6 +68,27 @@ source <path to virtual environment>/bin/activate
 python3 -B src/mqttlogger.py --config /path/to/your/config/file.yaml
 ```
 
+## Usage with docker
+
+This software is also available as docker container:
+
+```
+docker pull danielringch/mqttlogger:latest
+```
+
+The container expects the configuration file at ``/config/mqttlogger.yaml``
+
+Example:
+
+```
+docker run --rm -it \
+  -v /path/to/config/file:/config \
+  -e MQLO_MQTT_HOST="12.34.56.78:8883" \
+  -e MQLO_MQTT_USER="user" \
+  -e MQLO_MQTT_PASS="password" \
+  danielringch/mqttlogger
+```
+
 ## Get support
 
 You have trouble getting started? Something does not work as expected? You have some suggestions or thoughts? Please let me know.
