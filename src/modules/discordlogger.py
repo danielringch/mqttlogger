@@ -6,28 +6,37 @@ from typing import Dict
 from .config import get_config_key, get_optional_config_key
 from .helpers import log_formatter, ModuleFilter, DISCORD_LOGGING_NAME
 
-_CONFIG_KEY_DISCORD = 'discord'
-_CONFIG_KEY_LEVEL = 'level'
-_CONFIG_KEY_TOKEN_PATH = 'token_path'
-_CONFIG_KEY_CHANNEL_ID = 'channel_id'
+_DISCORD_CONFIG_KEY = 'discord'
+_TOKEN_CONFIG_KEY = 'token'
+_TOKEN_PATH_CONFIG_KEY = 'token_path'
+_LEVEL_CONFIG_KEY = 'level'
+_CHANNEL_ID_CONFIG_KEY = 'channel_id'
+
+_TOKEN_ENV_NAME = 'MQLO_DISCORD_TOKEN'
+_TOKEN_PATH_ENV_NAME = 'MQLO_DISCORD_TOKEN_PATH'
+_CHANNEL_ID_ENV_NAME = 'MQLO_DISCORD_CHANNEL_ID'
 
 _MAX_MESSAGE_LENGTH = 2000
 
 discord_logging = logging.getLogger(DISCORD_LOGGING_NAME)
 
 def create_discord_logger(config: Dict):
-    if _CONFIG_KEY_DISCORD not in config:
+    if _DISCORD_CONFIG_KEY not in config:
         return
     
-    level = get_optional_config_key(config, lambda x: getattr(logging, str(x).upper()), 'warning', None, _CONFIG_KEY_DISCORD, _CONFIG_KEY_LEVEL)
-    token_path = get_config_key(config, str, None, _CONFIG_KEY_DISCORD, _CONFIG_KEY_TOKEN_PATH)
-    channel_id = get_config_key(config, int, None, _CONFIG_KEY_DISCORD, _CONFIG_KEY_CHANNEL_ID)
+    if (token_path := get_optional_config_key(config, str, None, _TOKEN_PATH_ENV_NAME, _DISCORD_CONFIG_KEY, _TOKEN_PATH_CONFIG_KEY)):
+        try:
+            with open(token_path, "r") as stream:
+                token = stream.readline()
+        except:
+            raise FileNotFoundError(f'Can not open token file {token_path}')
+    elif (token := get_optional_config_key(config, str, None, _TOKEN_ENV_NAME, _DISCORD_CONFIG_KEY, _TOKEN_CONFIG_KEY)):
+        pass
+    else:
+        raise KeyError('No discord token or token path was given in the configuration')
     
-    try:
-        with open(token_path, "r") as stream:
-            token = stream.readline()
-    except:
-        raise FileNotFoundError(f'Can not open token file {token_path}')
+    level = get_optional_config_key(config, lambda x: getattr(logging, str(x).upper()), 'warning', None, _DISCORD_CONFIG_KEY, _LEVEL_CONFIG_KEY)
+    channel_id = get_config_key(config, int, _CHANNEL_ID_ENV_NAME, _DISCORD_CONFIG_KEY, _CHANNEL_ID_CONFIG_KEY)
 
     logger = logging.getLogger()
 

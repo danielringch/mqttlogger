@@ -4,14 +4,14 @@ from typing import Dict
 from .config import get_optional_config_key
 from .helpers import log_formatter, ModuleFilter
 
-_CONFIG_KEY_STDOUT = 'stdout'
-_CONFIG_KEY_LEVEL = 'level'
+_STDOUT_CONFIG_KEY = 'stdout'
+_LEVEL_CONFIG_KEY = 'level'
 
 def create_std_logger(config: Dict):
-    if _CONFIG_KEY_STDOUT not in config:
+    if _STDOUT_CONFIG_KEY not in config:
         return
 
-    level = get_optional_config_key(config, lambda x: getattr(logging, str(x).upper()), 'debug', None, _CONFIG_KEY_STDOUT, _CONFIG_KEY_LEVEL)
+    level = get_optional_config_key(config, lambda x: getattr(logging, str(x).upper()), 'debug', None, _STDOUT_CONFIG_KEY, _LEVEL_CONFIG_KEY)
 
     logger = logging.getLogger()
         

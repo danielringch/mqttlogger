@@ -5,18 +5,18 @@ from typing import Dict
 from .config import get_config_key, get_optional_config_key
 from .helpers import log_formatter, ModuleFilter
 
-_CONFIG_KEY_FILE = 'file'
-_CONFIG_KEY_LEVEL = 'level'
-_CONFIG_KEY_PATH = 'path'
-_CONFIG_KEY_DAYS = 'days'
+_FILE_CONFIG_KEY = 'file'
+_LEVEL_CONFIG_KEY = 'level'
+_PATH_CONFIG_KEY = 'path'
+_DAYS_CONFIG_KEY = 'days'
 
 def create_file_logger(config: Dict):
-    if _CONFIG_KEY_FILE not in config:
+    if _FILE_CONFIG_KEY not in config:
         return
     
-    level = get_optional_config_key(config, lambda x: getattr(logging, str(x).upper()), 'debug', None, _CONFIG_KEY_FILE, _CONFIG_KEY_LEVEL)
-    path = get_config_key(config, str, None, _CONFIG_KEY_FILE, _CONFIG_KEY_PATH)
-    days = get_optional_config_key(config, int, 0, None, _CONFIG_KEY_FILE, _CONFIG_KEY_DAYS)
+    level = get_optional_config_key(config, lambda x: getattr(logging, str(x).upper()), 'debug', None, _FILE_CONFIG_KEY, _LEVEL_CONFIG_KEY)
+    path = get_config_key(config, str, None, _FILE_CONFIG_KEY, _PATH_CONFIG_KEY)
+    days = get_optional_config_key(config, int, 0, None, _FILE_CONFIG_KEY, _DAYS_CONFIG_KEY)
     
     logger = logging.getLogger()
 
