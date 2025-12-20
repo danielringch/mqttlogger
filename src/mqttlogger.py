@@ -6,7 +6,7 @@ from modules.filelogger import create_file_logger
 from modules.discordlogger import create_discord_logger
 from modules.mqttclient import MqttClient
 
-__version__ = "1.0.0"
+__version__ = "1.1.0"
 
 async def main():
     parser = argparse.ArgumentParser(description='TODO')
