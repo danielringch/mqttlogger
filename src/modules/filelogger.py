@@ -2,7 +2,8 @@ import logging
 from logging.handlers import TimedRotatingFileHandler
 from typing import Dict
 
-from .helpers import log_formatter, ModuleFilter, get_config_key, get_optional_config_key
+from .config import get_config_key, get_optional_config_key
+from .helpers import log_formatter, ModuleFilter
 
 _CONFIG_KEY_FILE = 'file'
 _CONFIG_KEY_LEVEL = 'level'
@@ -13,9 +14,9 @@ def create_file_logger(config: Dict):
     if _CONFIG_KEY_FILE not in config:
         return
     
-    level = get_optional_config_key(config, lambda x: getattr(logging, str(x).upper()), 'debug', _CONFIG_KEY_FILE, _CONFIG_KEY_LEVEL)
-    path = get_config_key(config, str, _CONFIG_KEY_FILE, _CONFIG_KEY_PATH)
-    days = get_optional_config_key(config, lambda x: int(x), 0, _CONFIG_KEY_FILE, _CONFIG_KEY_DAYS)
+    level = get_optional_config_key(config, lambda x: getattr(logging, str(x).upper()), 'debug', None, _CONFIG_KEY_FILE, _CONFIG_KEY_LEVEL)
+    path = get_config_key(config, str, None, _CONFIG_KEY_FILE, _CONFIG_KEY_PATH)
+    days = get_optional_config_key(config, int, 0, None, _CONFIG_KEY_FILE, _CONFIG_KEY_DAYS)
     
     logger = logging.getLogger()
 

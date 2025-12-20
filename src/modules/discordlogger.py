@@ -3,7 +3,8 @@ from discord.ext import tasks
 from queue import Queue
 from typing import Dict
 
-from .helpers import log_formatter, ModuleFilter, get_config_key, get_optional_config_key, DISCORD_LOGGING_NAME
+from .config import get_config_key, get_optional_config_key
+from .helpers import log_formatter, ModuleFilter, DISCORD_LOGGING_NAME
 
 _CONFIG_KEY_DISCORD = 'discord'
 _CONFIG_KEY_LEVEL = 'level'
@@ -18,9 +19,9 @@ def create_discord_logger(config: Dict):
     if _CONFIG_KEY_DISCORD not in config:
         return
     
-    level = get_optional_config_key(config, lambda x: getattr(logging, str(x).upper()), 'warning', _CONFIG_KEY_DISCORD, _CONFIG_KEY_LEVEL)
-    token_path = get_config_key(config, str, _CONFIG_KEY_DISCORD, _CONFIG_KEY_TOKEN_PATH)
-    channel_id = get_config_key(config, int, _CONFIG_KEY_DISCORD, _CONFIG_KEY_CHANNEL_ID)
+    level = get_optional_config_key(config, lambda x: getattr(logging, str(x).upper()), 'warning', None, _CONFIG_KEY_DISCORD, _CONFIG_KEY_LEVEL)
+    token_path = get_config_key(config, str, None, _CONFIG_KEY_DISCORD, _CONFIG_KEY_TOKEN_PATH)
+    channel_id = get_config_key(config, int, None, _CONFIG_KEY_DISCORD, _CONFIG_KEY_CHANNEL_ID)
     
     try:
         with open(token_path, "r") as stream:

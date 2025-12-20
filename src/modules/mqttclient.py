@@ -4,7 +4,7 @@ from functools import partial
 from ssl import CERT_NONE
 from typing import Dict, Set
 
-from .helpers import get_config_key, get_optional_config_key
+from .config import get_config_key, get_optional_config_key
 
 _CONFIG_KEY_MQTT = 'mqtt'
 _CONFIG_KEY_HOST = 'host'
@@ -33,11 +33,11 @@ _DECODERS = {
 
 class MqttClient():
     def __init__(self, config: Dict):
-        ip, port = get_config_key(config, lambda x: str(x).split(':'), _CONFIG_KEY_MQTT, _CONFIG_KEY_HOST)
-        ca_path = get_optional_config_key(config, str, None, _CONFIG_KEY_MQTT, _CONFIG_KEY_CA)
-        is_tls_insecure = get_optional_config_key(config, bool, False, _CONFIG_KEY_MQTT, _CONFIG_KEY_TLS_INSECURE)
-        user = get_optional_config_key(config, str, None, _CONFIG_KEY_MQTT, _CONFIG_KEY_USER)
-        password = get_optional_config_key(config, str, None, _CONFIG_KEY_MQTT, _CONFIG_KEY_PASSWORD)
+        ip, port = get_config_key(config, lambda x: str(x).split(':'), None, _CONFIG_KEY_MQTT, _CONFIG_KEY_HOST)
+        ca_path = get_optional_config_key(config, str, None, None, _CONFIG_KEY_MQTT, _CONFIG_KEY_CA)
+        is_tls_insecure = get_optional_config_key(config, bool, False, None, _CONFIG_KEY_MQTT, _CONFIG_KEY_TLS_INSECURE)
+        user = get_optional_config_key(config, str, None, None, _CONFIG_KEY_MQTT, _CONFIG_KEY_USER)
+        password = get_optional_config_key(config, str, None, None, _CONFIG_KEY_MQTT, _CONFIG_KEY_PASSWORD)
 
         if _CONFIG_KEY_TOPICS not in config:
             raise KeyError('No topics given in config')
@@ -50,8 +50,8 @@ class MqttClient():
         except:
             raise ValueError('Invalid list of topics')
         for topic_name in topics_names:
-            level = get_config_key(config, lambda x: getattr(logging, str(x).upper()), _CONFIG_KEY_TOPICS, topic_name, _CONFIG_KEY_LEVEL)
-            format = get_config_key(config, lambda x: _DECODERS[str(x)], _CONFIG_KEY_TOPICS, topic_name, _CONFIG_KEY_TYPE)
+            level = get_config_key(config, lambda x: getattr(logging, str(x).upper()), None, _CONFIG_KEY_TOPICS, topic_name, _CONFIG_KEY_LEVEL)
+            format = get_config_key(config, lambda x: _DECODERS[str(x)], None, _CONFIG_KEY_TOPICS, topic_name, _CONFIG_KEY_TYPE)
             self.__mqtt.message_callback_add(topic_name, partial(self.__process_message, level, format))
             self.__topics.add(topic_name)
 
@@ -82,4 +82,4 @@ class MqttClient():
 
             logging.log(level, f'MQTT @ {topic}: {data}')
         except Exception as e:
-            self.msg.error(f'Unable to parse MQTT message on topic {topic}: {e}')
+            logging.error(f'Unable to parse MQTT message on topic {topic}: {e}')
